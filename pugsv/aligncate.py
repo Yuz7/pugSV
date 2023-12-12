@@ -33,11 +33,26 @@ class aligncate:
         self.align = align
         self.start = self.align.reference_start
         self.end = self.align.reference_end
+        self.name = align.query_name
         self.signs = []
         self.__generate_index()
         pass
     
-    def token_data(self, start, end):
+    def char_data(self, start, end):
+        inscount, inslen, delcount, dellen = 0, 0, 0, 0
+        for sign in self.signs:
+            if sign[0][0] > end:
+                break
+            elif sign[0][0] < start:
+                continue
+            elif sign[0][0] >= start:
+                if sign[2] == 'I':
+                    inscount += 1
+                    inslen += sign[0][1] - sign[0][0]
+                elif sign[2] == 'D':
+                    delcount += 1
+                    dellen += sign[1][1] - sign[1][0]
+        return inscount, inslen, delcount, dellen
         pass
     
     def __generate_index(self):

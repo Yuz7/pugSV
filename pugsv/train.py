@@ -24,6 +24,7 @@ import argparse
 from pugsv.utils.config_utils import TrainingConfig
 import pugsv.utils.data_utils as data_utils
 from pugsv.tokenization import tokenization
+from pugsv.preprocessing import preprocessing
 from torch.utils.data import DataLoader
 import torch.optim as optim
 import pysam
@@ -33,6 +34,8 @@ parser = argparse.ArgumentParser(description='Cue model training')
 parser.add_argument('--config', help='Training config')
 parser.add_argument('--data_config', help='(Optional) Dataset config for streaming', default=None)
 args = parser.parse_args()
+
+INTERVAL_SIZE = 150000
 
 def train(data_config: TrainingConfig, data_loader: DataLoader, epoch, collect_data_metrics=False, classify=False):
     #split chorms to train chorms and valid chorms with 4:1
@@ -98,7 +101,7 @@ def train(data_config: TrainingConfig, data_loader: DataLoader, epoch, collect_d
         
         task_list = task_list_bychrom[chrom]
         for task in task_list:
-            
+            tokens = preprocessing(bam_path, chrom, INTERVAL_SIZE)
             pass
         pass
     

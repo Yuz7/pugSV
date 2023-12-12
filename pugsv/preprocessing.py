@@ -22,15 +22,21 @@
 
 import pysam
 from pugsv.aligncate import aligncate
+from pugsv.tokenization import token
+from pugsv.tokenization import char
+from pugsv.tokenization import tokenization
 
-def preprocessing(bam_path, chrom, interval_size, min_token_size):
+MIN_TOKEN_SIZE = 100
+
+def preprocessing(bam_path, chrom, interval_size):
     aln_file = pysam.AlignmentFile(bam_path)
     chrom_len = aln_file.get_reference_length(chrom)
     interval_count = chrom_len // interval_size
     pos = 0
     new_aligns = [aligncate]
-    tokens = []     #inscount   inslen  delcount    dellen  depth   pos_start    pos_end
-    
+    chars = []     #inscount   inslen  delcount    dellen  depth   pos_start    pos_end
+    tokens = [token]
+
     for interval_id in range(interval_count):
         start = pos
         end = pos + interval_size if pos + interval_size > chrom_len else chrom_len
@@ -46,13 +52,15 @@ def preprocessing(bam_path, chrom, interval_size, min_token_size):
                     break
                 if new_align.end <= token_iter_pos:
                     continue
-                
+                chars.append(char(new_align, MIN_TOKEN_SIZE, interval_id, token_iter_pos, token_iter_pos + min_token_size))
                 pass
-            if token_iter_pos + min_token_size >= end:
+            tokens.append(token(chars))
+            if token_iter_pos + MIN_TOKEN_SIZE >= end:
                 break
-            token_iter_pos += min_token_size
+            token_iter_pos += MIN_TOKEN_SIZE + 1
             pass
         
         if(end == chrom_len):
             break
-    pass
+    
+    return tokenization(tokens)
