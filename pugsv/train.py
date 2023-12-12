@@ -25,9 +25,12 @@ from pugsv.utils.config_utils import TrainingConfig
 import pugsv.utils.data_utils as data_utils
 from pugsv.tokenization import tokenization
 from pugsv.preprocessing import preprocessing
+from pugsv.dataset import pugDataset
 from torch.utils.data import DataLoader
 import torch.optim as optim
 import pysam
+import torch
+import numpy as np
 import gc
 
 parser = argparse.ArgumentParser(description='Cue model training')
@@ -36,6 +39,7 @@ parser.add_argument('--data_config', help='(Optional) Dataset config for streami
 args = parser.parse_args()
 
 INTERVAL_SIZE = 150000
+BATCH_SIZE = 8
 
 def train(data_config: TrainingConfig, data_loader: DataLoader, epoch, collect_data_metrics=False, classify=False):
     #split chorms to train chorms and valid chorms with 4:1
@@ -94,15 +98,41 @@ def train(data_config: TrainingConfig, data_loader: DataLoader, epoch, collect_d
     #debug
     train_chroms = ['chr1', 'chr2', 'chr3', 'chr4']
     valid_chroms = ['chr15']
-    
-    for chrom in train_chroms + valid_chroms:
+    train_tokens = []
+    valid_tokens = []
+    for chrom in train_chroms:
         if chrom not in task_list_bychrom.keys():
             continue
         
         task_list = task_list_bychrom[chrom]
         for task in task_list:
-            tokens = preprocessing(bam_path, chrom, INTERVAL_SIZE)
+            train_tokens.append(preprocessing(bam_path, chrom, INTERVAL_SIZE))
             pass
         pass
     
+    for chrom in valid_chroms:
+        if chrom not in task_list_bychrom.keys():
+            continue
+        
+        task_list = task_list_bychrom[chrom]
+        for task in task_list:
+            valid_tokens.append(preprocessing(bam_path, chrom, INTERVAL_SIZE))
+            pass
+        pass
+    
+    train_data = torch.from_numpy(np.array(train_tokens).astype(np.int64))
+    valid_data = torch.from_numpy(np.array(valid_tokens).astype(np.int64))
+    
+    train_dataset = pugDataset(train_data)
+    valid_dataset = pugDataset(valid_data)
+    
+    train_loader = torch.utils.data.DataLoader(train_dataset,
+                                               batch_size=BATCH_SIZE,
+                                               shuffle=True,
+                                               pin_memory=True,drop_last=True)
+    valid_loader = torch.utils.data.DataLoader(valid_dataset,
+                                             batch_size=BATCH_SIZE,
+                                             shuffle=False,
+                                             pin_memory=True,drop_last=True)
+
     pass
