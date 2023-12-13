@@ -52,7 +52,7 @@ def preprocessing(bam_path, chrom, interval_size):
                     break
                 if new_align.end <= token_iter_pos:
                     continue
-                chars.append(char(new_align, MIN_TOKEN_SIZE, interval_id, token_iter_pos, token_iter_pos + min_token_size))
+                chars.append(char(new_align, MIN_TOKEN_SIZE, interval_id, token_iter_pos, token_iter_pos + MIN_TOKEN_SIZE))
                 pass
             tokens.append(token(chars))
             if token_iter_pos + MIN_TOKEN_SIZE >= end:

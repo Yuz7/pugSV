@@ -20,18 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import argparse
+import argparse, gc, sys, math
 from pugsv.utils.config_utils import TrainingConfig
-import pugsv.utils.data_utils as data_utils
 from pugsv.tokenization import tokenization
 from pugsv.preprocessing import preprocessing
+import pugsv.model as models
 from pugsv.dataset import pugDataset
 from torch.utils.data import DataLoader
+import torch.optim.lr_scheduler as lr_scheduler
+from torch.utils.tensorboard import SummaryWriter
 import torch.optim as optim
-import pysam
-import torch
+import pysam, torch, tqdm, time, platform, os
 import numpy as np
-import gc
 
 parser = argparse.ArgumentParser(description='Cue model training')
 parser.add_argument('--config', help='Training config')
@@ -40,6 +40,57 @@ args = parser.parse_args()
 
 INTERVAL_SIZE = 150000
 BATCH_SIZE = 8
+
+def train_one_epoch(model, optimizer, data_loader, device, epoch):
+    """
+    Train the model and updata weights.
+    """
+    model.train()
+    loss_function = torch.nn.CrossEntropyLoss() 
+    accu_loss = torch.zeros(1).to(device) 
+    accu_num = torch.zeros(1).to(device)
+    optimizer.zero_grad()
+    sample_num = 0
+    data_loader = tqdm(data_loader)
+    for step, data in enumerate(data_loader):
+        exp, label = data
+        sample_num += exp.shape[0]
+        _,pred,_ = model(exp.to(device))
+        pred_classes = torch.max(pred, dim=1)[1]
+        accu_num += torch.eq(pred_classes, label.to(device)).sum()
+        loss = loss_function(pred, label.to(device))
+        loss.backward()
+        accu_loss += loss.detach()
+        data_loader.desc = "[train epoch {}] loss: {:.3f}, acc: {:.3f}".format(epoch,
+                                                                               accu_loss.item() / (step + 1),
+                                                                               accu_num.item() / sample_num)
+        if not torch.isfinite(loss):
+            print('WARNING: non-finite loss, ending training ', loss)
+            sys.exit(1)
+        optimizer.step() 
+        optimizer.zero_grad()
+    return accu_loss.item() / (step + 1), accu_num.item() / sample_num
+
+@torch.no_grad()
+def evaluate(model, data_loader, device, epoch):
+    model.eval()
+    loss_function = torch.nn.CrossEntropyLoss()
+    accu_num = torch.zeros(1).to(device)
+    accu_loss = torch.zeros(1).to(device)
+    sample_num = 0
+    data_loader = tqdm(data_loader)
+    for step, data in enumerate(data_loader):
+        exp, labels = data
+        sample_num += exp.shape[0]
+        _,pred,_ = model(exp.to(device))
+        pred_classes = torch.max(pred, dim=1)[1]
+        accu_num += torch.eq(pred_classes, labels.to(device)).sum()
+        loss = loss_function(pred, labels.to(device))
+        accu_loss += loss
+        data_loader.desc = "[valid epoch {}] loss: {:.3f}, acc: {:.3f}".format(epoch,
+                                                                               accu_loss.item() / (step + 1),
+                                                                               accu_num.item() / sample_num)
+    return accu_loss.item() / (step + 1), accu_num.item() / sample_num
 
 def train(data_config: TrainingConfig, data_loader: DataLoader, epoch, collect_data_metrics=False, classify=False):
     #split chorms to train chorms and valid chorms with 4:1
@@ -126,13 +177,46 @@ def train(data_config: TrainingConfig, data_loader: DataLoader, epoch, collect_d
     train_dataset = pugDataset(train_data)
     valid_dataset = pugDataset(valid_data)
     
-    train_loader = torch.utils.data.DataLoader(train_dataset,
-                                               batch_size=BATCH_SIZE,
-                                               shuffle=True,
-                                               pin_memory=True,drop_last=True)
-    valid_loader = torch.utils.data.DataLoader(valid_dataset,
-                                             batch_size=BATCH_SIZE,
-                                             shuffle=False,
-                                             pin_memory=True,drop_last=True)
-
+    train_loader =  DataLoader(train_dataset,
+                                batch_size=BATCH_SIZE,
+                                shuffle=True,
+                                pin_memory=True,drop_last=True)
+    valid_loader =  DataLoader(valid_dataset,
+                                batch_size=BATCH_SIZE,
+                                shuffle=False,
+                                pin_memory=True,drop_last=True)
+    
+    tb_writer = SummaryWriter()
+    device = torch.device(device if torch.cuda.is_available() else "cpu")
+    project_path = '../project/'
+    model = models.create_model(2, 7)
+    lr = 0.0001
+    lrf = 0.01
+    pg = [p for p in model.parameters() if p.requires_grad]
+    optimizer = optim.SGD(pg, lr=lr, momentum=0.9, weight_decay=5E-5) 
+    lf = lambda x: ((1 + math.cos(x * math.pi / epochs)) / 2) * (1 - lrf) + lrf  
+    scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)
+    epochs = 10
+    for epoch in range(epochs):
+        train_loss, train_acc = train_one_epoch(model=model,
+                                                optimizer=optimizer,
+                                                data_loader=train_loader,
+                                                device=device,
+                                                epoch=epoch)
+        scheduler.step()
+        val_loss, val_acc = evaluate(model=model,
+                                     data_loader=valid_loader,
+                                     device=device,
+                                     epoch=epoch)
+        tags = ["train_loss", "train_acc", "val_loss", "val_acc", "learning_rate"]
+        tb_writer.add_scalar(tags[0], train_loss, epoch)
+        tb_writer.add_scalar(tags[1], train_acc, epoch)
+        tb_writer.add_scalar(tags[2], val_loss, epoch)
+        tb_writer.add_scalar(tags[3], val_acc, epoch)
+        tb_writer.add_scalar(tags[4], optimizer.param_groups[0]["lr"], epoch)
+        if platform.system().lower() == 'windows':
+            torch.save(model.state_dict(), project_path+"/model-{}.pth".format(epoch))
+        else:
+            torch.save(model.state_dict(), "/%s"%project_path+"/model-{}.pth".format(epoch))
+        pass
     pass

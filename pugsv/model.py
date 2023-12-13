@@ -22,7 +22,10 @@
 
 import torch
 import torch.nn as nn
-import transformers
+from collections import OrderedDict
+from functools import partial
+from customizedlinear import CustomizedLinear
+from einops import rearrange
 import numpy as np
 import copy
 
@@ -36,28 +39,40 @@ def drop_path(x, drop_prob: float = 0., training: bool = False):
     output = x.div(keep_prob) * random_tensor
     return output
 
+def get_weight(att_mat):
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    att_mat = torch.stack(att_mat).squeeze(1)
+    #print(att_mat.size())
+    # Average the attention weights across all heads.
+    att_mat = torch.mean(att_mat, dim=2)
+    #print(att_mat.size())
+    # To account for residual connections, we add an identity matrix to the
+    # attention matrix and re-normalize the weights.
+    residual_att = torch.eye(att_mat.size(3))
+    aug_att_mat = att_mat.to(device) + residual_att.to(device)
+    aug_att_mat = aug_att_mat / aug_att_mat.sum(dim=-1).unsqueeze(-1)
+    #print(aug_att_mat.size())
+    # Recursively multiply the weight matrices
+    joint_attentions = torch.zeros(aug_att_mat.size()).to(device)
+    joint_attentions[0] = aug_att_mat[0]
+    
+    for n in range(1, aug_att_mat.size(0)):
+        joint_attentions[n] = torch.matmul(aug_att_mat[n], joint_attentions[n-1])
+
+    #print(joint_attentions.size())
+    # Attention from the output token to the input space.
+    v = joint_attentions[-1]
+    #print(v.size())
+    v = v[:,0,1:]
+    #print(v.size())
+    return v
+
 class DropPath(nn.Module):
     def __init__(self, drop_prob=None):
         super(DropPath, self).__init__()
         self.drop_prob = drop_prob
     def forward(self, x):
         return drop_path(x, self.drop_prob, self.training)
-
-class FeatureEmbed(nn.Module):
-    def __init__(self, num_genes, mask, embed_dim=192, fe_bias=True, norm_layer=None):
-        super().__init__()
-        self.num_genes = num_genes
-        self.num_patches = mask.shape[1]
-        self.embed_dim = embed_dim
-        mask = np.repeat(mask,embed_dim,axis=1)
-        self.mask = mask
-        self.fe = CustomizedLinear(self.mask)
-        self.norm = norm_layer(embed_dim) if norm_layer else nn.Identity()
-    def forward(self, x):
-        num_cells = x.shape[0]
-        x = rearrange(self.fe(x), 'h (w c) -> h c w ', c=self.num_patches)
-        x = self.norm(x)
-        return x
 
 class Attention(nn.Module):
     def __init__(self,
@@ -133,15 +148,15 @@ class Mlp(nn.Module):
         return x
     
 class Transformer(nn.Module):
-    def __init__(self, num_classes, num_genes, mask, fe_bias=True,
-                 embed_dim=768, depth=12, num_heads=12, mlp_ratio=4.0, qkv_bias=True,
+    def __init__(self, num_classes, num_features, mask, fe_bias=True,
+                 embed_dim=6, depth=12, num_heads=12, mlp_ratio=4.0, qkv_bias=True,
                  qk_scale=None, representation_size=None, distilled=False, drop_ratio=0.,
-                 attn_drop_ratio=0., drop_path_ratio=0., embed_layer=FeatureEmbed, norm_layer=None,
+                 attn_drop_ratio=0., drop_path_ratio=0., norm_layer=None,
                  act_layer=None):
         """
         Args:
             num_classes (int): number of classes for classification head
-            num_genes (int): number of feature of input(expData) 
+            num_features (int): number of feature of input(expData) 
             embed_dim (int): embedding dimension
             depth (int): depth of transformer 
             num_heads (int): number of attention heads
@@ -159,10 +174,8 @@ class Transformer(nn.Module):
         super(Transformer, self).__init__()
         self.num_classes = num_classes
         self.num_features = self.embed_dim = embed_dim
-        self.num_tokens = 2 if distilled else 1
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
         act_layer = act_layer or nn.GELU
-        self.feature_embed = embed_layer(num_genes, mask = mask, embed_dim=embed_dim, fe_bias=fe_bias)
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
         self.dist_token = nn.Parameter(torch.zeros(1, 1, embed_dim)) if distilled else None
         dpr = [x.item() for x in torch.linspace(0, drop_path_ratio, depth)]
@@ -200,10 +213,9 @@ class Transformer(nn.Module):
         nn.init.trunc_normal_(self.cls_token, std=0.02)
         self.apply(_init_vit_weights)
     def forward_features(self, x):
-        x = self.feature_embed(x)
         cls_token = self.cls_token.expand(x.shape[0], -1, -1)
         if self.dist_token is None: #ViT中就是None
-            x = torch.cat((cls_token, x), dim=1) 
+            x = torch.cat((cls_token, x), dim=1)
         else:
             x = torch.cat((cls_token, self.dist_token.expand(x.shape[0], -1, -1), x), dim=1)
         attn_weights = []
@@ -242,3 +254,14 @@ def _init_vit_weights(m):
     elif isinstance(m, nn.LayerNorm):
         nn.init.zeros_(m.bias)
         nn.init.ones_(m.weight)
+        
+def create_model(num_classes, num_features, mask, embed_dim=48,depth=2,num_heads=4,has_logits: bool = True):
+    model = Transformer(num_classes=num_classes, 
+                        num_features=num_features, 
+                        mask = mask,
+                        embed_dim=embed_dim,
+                        depth=depth,
+                        num_heads=num_heads,
+                        drop_ratio=0.5, attn_drop_ratio=0.5, drop_path_ratio=0.5,
+                        representation_size=embed_dim if has_logits else None)
+    return model

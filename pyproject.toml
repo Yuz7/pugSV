@@ -12,6 +12,9 @@ torchvision = "^0.16.1"
 pysam = "^0.22.0"
 scipy = "^1.11.4"
 transformers = "^4.35.2"
+einops = "^0.7.0"
+tensorboard = "^2.15.1"
+torch-tb-profiler = "^0.4.3"
 
 
 [build-system]
