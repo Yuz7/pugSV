@@ -22,7 +22,7 @@
 
 import random
 
-def data_split(full_list, ratio, shuffle=True):
+def data_split(full_list, ratio, shuffle=False):
     """
     数据集拆分: 将列表full_list按比例ratio(随机)划分为2个子列表sublist_1与sublist_2
     :param full_list: 数据列表

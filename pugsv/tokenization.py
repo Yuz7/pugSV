@@ -30,58 +30,60 @@ class char():
         self.interval_id = interval_id
         self.align_name = align.name
         self.data = [0] * 7
-        self.__convert_to_char(align)
+        self.__convert_to_char(align, token_start, token_end)
         pass
     
-    def __convert_to_token(self, align: aligncate, token_start: int, token_end: int):
-        if align.end < token_end:
-            token_end = align.end
+    def __convert_to_char(self, align: aligncate, token_start: int, token_end: int):
         self.data[5] = token_start
         self.data[6] = token_end
         self.data[0], self.data[1], self.data[2], self.data[3] = align.char_data(token_start, token_end)
         pass
 
 class token():
-    def __init__(self, chars: [char]) -> None:
-        self.chars = [char]
+    def __init__(self, chars) -> None:
+        self.chars = chars
         self.data = [0] * 7
-        self.__convert_to_token([char])
+        self.__convert_to_token(chars)
         pass
 
-    def __convert_to_token(self, chars: [char]):
+    def __convert_to_token(self, chars):
         for char_loc in range(len(chars)):
             if char_loc == 0:
-                self.data[5] = chars[char_loc][5]
+                self.data[5] = chars[char_loc].data[5]
             if char_loc == len(chars) - 1:
-                self.data[6] = chars[char_loc][6]
+                self.data[6] = chars[char_loc].data[6]
             for i in range(4):
-                self.data[i] += chars[char_loc][i]
+                self.data[i] += chars[char_loc].data[i]
         pass
 
-def __merge_tokens(tokens: [token]):
+def __merge_tokens(tokens):
     merge_tokens = [0] * 7
     for token_loc in range(len(tokens)):
         if token_loc == 0:
-            merge_tokens[5] = tokens[token_loc][5]
+            merge_tokens[5] = tokens[token_loc].data[5]
         if token_loc == len(tokens) - 1:
-            merge_tokens[6] = tokens[token_loc][6]
+            merge_tokens[6] = tokens[token_loc].data[6]
         for i in range(4):
-            merge_tokens[i] += tokens[token_loc][i]
-    pass
+            merge_tokens[i] += tokens[token_loc].data[i]
+    return merge_tokens
 
-def tokenization(tokens: [token]):
+def tokenization(tokens):
     new_tokens = []
     current_tokens = []
-    for token in tokens:
-        if token[0] > 0:
-            current_tokens.append(token)
+    for i in range(len(tokens)):
+        if tokens[i].data[0] > 0:
+            current_tokens.append(tokens[i])
             pass
-        elif token[3] >= 100:
-            current_tokens.append(token)
+        elif tokens[i].data[3] >= 100:
+            current_tokens.append(tokens[i])
             pass
+        elif current_tokens.count == 0:
+            current_tokens.append(tokens[i])
         else:
-            if current_tokens.count == 0:
-                current_tokens.append(token)
             new_tokens.append(__merge_tokens(current_tokens))
             current_tokens = []
+            continue
+        if i == len(tokens) - 1:
+            new_tokens.append(__merge_tokens(current_tokens))
+        pass
     return new_tokens

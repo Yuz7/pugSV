@@ -29,7 +29,7 @@ MIN_MAPQ = 10
 MIN_SV_SIZE = 30
 
 class aligncate:
-    def __init__(self, align: AlignedSegment) -> None:
+    def __init__(self, align: AlignedSegment):
         self.align = align
         self.start = self.align.reference_start
         self.end = self.align.reference_end

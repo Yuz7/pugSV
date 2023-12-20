@@ -23,13 +23,14 @@
 from torch.utils.data import Dataset
 
 class pugDataset(Dataset):
-    def __init__(self, tokens):
+    def __init__(self, tokens, targets):
         super().__init__()
         self.tokens = tokens
+        self.targets = targets
         pass
 
     def __getitem__(self, index):
-        return self.tokens[index]
+        return self.tokens[index], self.targets[index]
     
     def __len__(self):
         return len(self.tokens)

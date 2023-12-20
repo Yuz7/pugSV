@@ -1,6 +1,7 @@
 #### REQUIRED ####
-bam: "../data/demo/inputs/chr21.small.bam"  # path to the alignments file (BAM or CRAM format)
-genome: "../data/demo/inputs/GRCh38.fa.fai"  # path to the referene FASTA FAI file
+bam: "/Users/yuz/Work/SVs/data/HG002_GRCh37_ONT-UL_UCSC_20200508.phased.REF_15.bam"  # path to the alignments file (BAM or CRAM format)
+genome: "/Users/yuz/Work/SVs/data/hs37d5.fa"  # path to the referene FASTA FAI file
+vcf: "/Users/yuz/Work/SVs/data/HG002_SVs_Tier1_v0.6.vcf"
 #### OPTIONAL ####
 interval_size: 1500000 # window size
 chr_names: ["chr21"]  # list of chromosomes to process: null (all) or a specific list e.g. ["chr1", "chr21"]
@@ -8,4 +9,5 @@ gpu_ids: []  # list of GPU ids to use for calling (default: CPU(s) will be used 
 n_jobs_per_gpu: 1 # how many parallel jobs to launch on the same GPU
 n_cpus: 1  # number of CPUs to use for calling if no GPUs are listed
 report_interval: 100  # frequency (in number of batches) for reporting image predictions
-batch_size: 16  # number of images per batch
+batch_size: 128  # number of images per batch
+num_epochs: 10

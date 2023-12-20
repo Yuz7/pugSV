@@ -77,7 +77,7 @@ class DropPath(nn.Module):
 class Attention(nn.Module):
     def __init__(self,
                  dim, 
-                 num_heads=8,
+                 num_heads=2,
                  qkv_bias=False,
                  qk_scale=None,
                  attn_drop_ratio=0.,
@@ -107,7 +107,7 @@ class Block(nn.Module):
     def __init__(self,
                  dim, 
                  num_heads,
-                 mlp_ratio=4., 
+                 mlp_ratio=2, 
                  qkv_bias=False,
                  qk_scale=None,
                  drop_ratio=0., 
@@ -125,9 +125,10 @@ class Block(nn.Module):
         self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop_ratio)
     def forward(self, x):
         #x = x + self.drop_path(self.attn(self.norm1(x)))
-        hhh, weights = self.attn(self.norm1(x))
+        x = self.norm1(x.to(torch.bfloat16))
+        hhh, weights = self.attn(x.to(torch.float32))
         x = x + self.drop_path(hhh)
-        x = x + self.drop_path(self.mlp(self.norm2(x)))
+        x = x + self.drop_path(self.mlp(self.norm2(x.to(torch.bfloat16))))
         return x, weights
     
 class Mlp(nn.Module):
@@ -140,7 +141,7 @@ class Mlp(nn.Module):
         self.fc2 = nn.Linear(hidden_features, out_features)
         self.drop = nn.Dropout(drop)
     def forward(self, x):
-        x = self.fc1(x)
+        x = self.fc1(x.to(torch.float32))
         x = self.act(x)
         x = self.drop(x)
         x = self.fc2(x)
@@ -148,8 +149,8 @@ class Mlp(nn.Module):
         return x
     
 class Transformer(nn.Module):
-    def __init__(self, num_classes, num_features, mask, fe_bias=True,
-                 embed_dim=6, depth=12, num_heads=12, mlp_ratio=4.0, qkv_bias=True,
+    def __init__(self, num_classes, fe_bias=True,
+                 embed_dim=4, depth=12, num_heads=2, mlp_ratio=2.0, qkv_bias=True,
                  qk_scale=None, representation_size=None, distilled=False, drop_ratio=0.,
                  attn_drop_ratio=0., drop_path_ratio=0., norm_layer=None,
                  act_layer=None):
@@ -176,8 +177,8 @@ class Transformer(nn.Module):
         self.num_features = self.embed_dim = embed_dim
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
         act_layer = act_layer or nn.GELU
-        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
-        self.dist_token = nn.Parameter(torch.zeros(1, 1, embed_dim)) if distilled else None
+        # self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
+        # self.dist_token = nn.Parameter(torch.zeros(1, 1, embed_dim)) if distilled else None
         dpr = [x.item() for x in torch.linspace(0, drop_path_ratio, depth)]
         #self.blocks = nn.Sequential(*[
         #    Block(dim=embed_dim, num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale,
@@ -192,32 +193,27 @@ class Transformer(nn.Module):
                           norm_layer=norm_layer, act_layer=act_layer)
             self.blocks.append(copy.deepcopy(layer))
         self.norm = norm_layer(embed_dim)
-        if representation_size and not distilled:
-            self.has_logits = True
-            self.num_features = representation_size
-            self.pre_logits = nn.Sequential(OrderedDict([
-                ("fc", nn.Linear(embed_dim, representation_size)),
-                ("act", nn.Tanh())
-            ]))
-        else:
-            self.has_logits = False
-            self.pre_logits = nn.Identity()
+        # if representation_size and not distilled:
+        #     self.has_logits = True
+        #     self.num_features = representation_size
+        #     self.pre_logits = nn.Sequential(OrderedDict([
+        #         ("fc", nn.Linear(embed_dim, representation_size)),
+        #         ("act", nn.Tanh())
+        #     ]))
+        # else:
+        self.has_logits = False
+        self.pre_logits = nn.Identity()
         # Classifier head(s)
         self.head = nn.Linear(self.num_features, num_classes) if num_classes > 0 else nn.Identity()
         self.head_dist = None
-        if distilled:
-            self.head_dist = nn.Linear(self.embed_dim, self.num_classes) if num_classes > 0 else nn.Identity()
+        # if distilled:
+        #     self.head_dist = nn.Linear(self.embed_dim, self.num_classes) if num_classes > 0 else nn.Identity()
         # Weight init
-        if self.dist_token is not None:
-            nn.init.trunc_normal_(self.dist_token, std=0.02)
-        nn.init.trunc_normal_(self.cls_token, std=0.02)
+        # if self.dist_token is not None:
+        #     nn.init.trunc_normal_(self.dist_token, std=0.02)
+        # nn.init.trunc_normal_(self.cls_token, std=0.02)
         self.apply(_init_vit_weights)
     def forward_features(self, x):
-        cls_token = self.cls_token.expand(x.shape[0], -1, -1)
-        if self.dist_token is None: #ViT中就是None
-            x = torch.cat((cls_token, x), dim=1)
-        else:
-            x = torch.cat((cls_token, self.dist_token.expand(x.shape[0], -1, -1), x), dim=1)
         attn_weights = []
         tem = x
         for layer_block in self.blocks:
@@ -225,13 +221,12 @@ class Transformer(nn.Module):
             attn_weights.append(weights)
         x = self.norm(tem)
         attn_weights = get_weight(attn_weights)
-        if self.dist_token is None:
-            return self.pre_logits(x[:, 0]),attn_weights 
-        else:
-            return x[:, 0], x[:, 1],attn_weights
+        # if self.dist_token is None:
+        return x, attn_weights 
+        # else:
+        #     return x[:, 0], x[:, 1],attn_weights
     def forward(self, x):
         latent, attn_weights = self.forward_features(x)
-
         if self.head_dist is not None: 
             latent, latent_dist = self.head(latent[0]), self.head_dist(latent[1])
             if self.training and not torch.jit.is_scripting():
@@ -255,10 +250,8 @@ def _init_vit_weights(m):
         nn.init.zeros_(m.bias)
         nn.init.ones_(m.weight)
         
-def create_model(num_classes, num_features, mask, embed_dim=48,depth=2,num_heads=4,has_logits: bool = True):
-    model = Transformer(num_classes=num_classes, 
-                        num_features=num_features, 
-                        mask = mask,
+def create_model(num_classes, embed_dim = 4, depth = 3, num_heads = 2, has_logits: bool = True):
+    model = Transformer(num_classes=num_classes,
                         embed_dim=embed_dim,
                         depth=depth,
                         num_heads=num_heads,
