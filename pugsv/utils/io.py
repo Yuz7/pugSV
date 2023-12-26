@@ -239,11 +239,15 @@ class BedRecordContainer:
             self.ground_truth[record.intervalA.chr_name].addi(record.intervalA.start, record.intervalA.end, record.sv_type)
 
     def get_sv_type(self, chrom, start, end):
+        if end is None:
+            print("chrom at start:{0}".format(start))
         if not self.ground_truth[chrom].overlap(start, end):
             return 0
         sv_types = self.ground_truth[chrom].overlap(start, end)
+        if len(sv_types) > 1:
+            return 3
         for sv_type in sv_types:
-            return 1 if sv_type == "DEL" else 2
+            return 1 if sv_type.data == "DEL" else 2
         pass
         
     # def overlap(self, interval):

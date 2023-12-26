@@ -1,7 +1,7 @@
 [INFO]  ===== Training config =====
-	bam: /Users/yuz/Work/SVs/data/HG002_GRCh37_ONT-UL_UCSC_20200508.phased.REF_15.bam
-	genome: /Users/yuz/Work/SVs/data/hs37d5.fa
-	vcf: /Users/yuz/Work/SVs/data/HG002_SVs_Tier1_v0.6.vcf
+	bam: /Users/yuz/Work/SVs/data/upload_data/HG002_GRCh37_ONT-UL_UCSC_20200508.phased.REF_15.bam
+	genome: /Users/yuz/Work/SVs/data/upload_data/hs37d5.fa
+	vcf: /Users/yuz/Work/SVs/data/upload_data/HG002_SVs_Tier1_v0.6.vcf
 	interval_size: 1500000
 	chr_names: ['chr21']
 	gpu_ids: []

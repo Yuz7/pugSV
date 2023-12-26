@@ -62,13 +62,12 @@ class aligncate:
         if self.align.is_unmapped or self.align.is_secondary or self.align.mapq < MIN_MAPQ:
             return
         
-        readPos = 0
+        readPos = self.align.reference_start
         refPos = self.align.reference_start
         read_start = self.align.query_alignment_start
         # # traverse cigar to find gaps(I or D) longer than min_sv_size
         cigar_ops, cigar_lengths = self.__cigar_to_list(self.align.cigarstring)
         # read_seq = self.align.query_sequence
-        
         for i in range(len(cigar_ops)):
             op = cigar_ops[i]
             opLen = cigar_lengths[i]

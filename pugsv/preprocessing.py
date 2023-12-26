@@ -23,47 +23,41 @@
 import pysam
 from pugsv.aligncate import aligncate
 from pugsv.tokenization import token
-from pugsv.tokenization import char
 from pugsv.tokenization import tokenization
+from intervaltree import IntervalTree
+import time, copy
 
 MIN_TOKEN_SIZE = 100
 
-def preprocessing(bam_path, chrom, interval_size):
-    aln_file = pysam.AlignmentFile(bam_path)
-    chrom_len = aln_file.get_reference_length(chrom)
-    interval_count = chrom_len // interval_size
-    pos = 0
-    new_aligns = []
-    chars = []     #inscount   inslen  delcount    dellen  depth   pos_start    pos_end
-    tokens = []
+def collect_err_callback(err):
+    print("error happen:{0}".format(str(err)))
 
-    for interval_id in range(interval_count):
-        print("******************** processing interval id:{0} ********************".format(interval_id))
-        start = pos
-        end = pos + interval_size if pos + interval_size > chrom_len else chrom_len
-        aligns = aln_file.fetch(chrom, start, end)
-        for align in aligns:
-            new_aligns.append(aligncate(align))
-            break
+def collect_tokens(bam_path, pos, interval_id, chrom, chrom_len, interval_size):
+    aln_file = pysam.AlignmentFile(bam_path)
+    start = pos
+    end = pos + interval_size if pos + interval_size < chrom_len else chrom_len
+    collect_new_aligns = IntervalTree()
+    collect_tokens = []
+    print("******************** processing interval id:{0} start pos:{1} end pos:{2} ********************".format(interval_id, start, end))
+    start_time = time.time()
+    aligns = aln_file.fetch(chrom, start, end)
+    for align in aligns:
+        collect_new_aligns.addi(align.reference_start, align.reference_end, aligncate(align))
+        pass
+    del aligns
+    token_iter_pos = pos
+    print("******************** processing interval id:{0} add tokens with collect_new_aligns len:{1}********************".format(interval_id, len(collect_new_aligns)))
+    while(True):
+        token_temp = token()
+        overlap_aligns = collect_new_aligns.overlap(token_iter_pos, token_iter_pos + MIN_TOKEN_SIZE)
+        for overlap_align in overlap_aligns:
+            token_temp.add(overlap_align.data, token_iter_pos, token_iter_pos + MIN_TOKEN_SIZE)
             pass
-        del aligns
-        token_iter_pos = pos
-        print("******************** processing interval id:{0} add tokens ********************".format(interval_id))
-        while(True):
-            for new_align in new_aligns:
-                if new_align.start > token_iter_pos:
-                    break
-                if new_align.end <= token_iter_pos:
-                    continue
-                chars.append(char(new_align, MIN_TOKEN_SIZE, interval_id, token_iter_pos, token_iter_pos + MIN_TOKEN_SIZE))
-                pass
-            tokens.append(token(chars))
-            if token_iter_pos + MIN_TOKEN_SIZE >= end:
-                break
-            token_iter_pos += MIN_TOKEN_SIZE + 1
-            pass
-        
-        if(end == chrom_len):
+        if len(overlap_aligns) > 0:
+            collect_tokens.append(copy.deepcopy(token_temp))
+        if token_iter_pos + MIN_TOKEN_SIZE >= end:
             break
-    
-    return tokenization(tokens)
+        token_iter_pos += MIN_TOKEN_SIZE + 1
+        pass
+    print("******************** processing interval id {0} done, collect_tokens len:{1} and using time:{2} ********************".format(interval_id, len(collect_tokens), (time.time() - start_time) * 1000))
+    return collect_tokens
