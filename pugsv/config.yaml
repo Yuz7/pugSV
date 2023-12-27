@@ -1,5 +1,5 @@
 #### REQUIRED ####
-bam: "/Users/yuz/Work/SVs/data/upload_data/HG002_GRCh37_ONT-UL_UCSC_20200508.phased.REF_15.bam"  # path to the alignments file (BAM or CRAM format)
+bam: "/Users/yuz/Work/SVs/data/HG002_GRCh37_ONT-UL_UCSC_20200508.phased.bam"  # path to the alignments file (BAM or CRAM format)
 genome: "/Users/yuz/Work/SVs/data/upload_data/hs37d5.fa"  # path to the referene FASTA FAI file
 vcf: "/Users/yuz/Work/SVs/data/upload_data/HG002_SVs_Tier1_v0.6.vcf"
 #### OPTIONAL ####

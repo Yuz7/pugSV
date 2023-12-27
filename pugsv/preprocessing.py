@@ -46,6 +46,8 @@ def collect_tokens(bam_path, pos, interval_id, chrom, chrom_len, interval_size):
         pass
     del aligns
     token_iter_pos = pos
+    if len(collect_new_aligns) == 0:
+        return collect_tokens
     print("******************** processing interval id:{0} add tokens with collect_new_aligns len:{1}********************".format(interval_id, len(collect_new_aligns)))
     while(True):
         token_temp = token()

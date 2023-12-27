@@ -250,7 +250,7 @@ def _init_vit_weights(m):
         nn.init.zeros_(m.bias)
         nn.init.ones_(m.weight)
         
-def create_model(num_classes, embed_dim = 5, depth = 6, num_heads = 2, has_logits: bool = True):
+def create_model(num_classes, embed_dim = 4, depth = 6, num_heads = 2, has_logits: bool = True):
     model = Transformer(num_classes=num_classes,
                         embed_dim=embed_dim,
                         depth=depth,

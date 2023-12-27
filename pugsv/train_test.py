@@ -33,38 +33,40 @@ if __name__ == '__main__':
     
     #debug
     #train_chroms = ['chr1', 'chr2', 'chr3', 'chr4']
-    train_chroms = ['15']
-    # valid_chroms = ['16']
+    train_chroms = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+    valid_chroms = ['16']
     train_tokens = defaultdict(list)
     print("******************** init ground truth by vcf ********************")
     ground_truth = pugsvIO.BedRecordContainer(data_config.vcf)
     targets = defaultdict(list)
+    tokens = defaultdict(list)
     # valid_tokens = []
     pool = multiprocessing.Pool(processes = 5)
-    for chrom in train_chroms:
+    for chrom in train_chroms + valid_chroms:
         
         #TODO multi-threading by interval_size
         aln_file = pysam.AlignmentFile(bam_path)
         chrom_len = aln_file.get_reference_length(chrom)
-        interval_count = (chrom_len - 20000000) // INTERVAL_SIZE
-        pos = 20000000
-        tokens = []
+        interval_count = chrom_len // INTERVAL_SIZE
+        pos = 0
         print("******************** processing bam into tokens with chrom:{0} chrom_len:{1} interval_count:{2} ********************".format(chrom, chrom_len, interval_count))
         for interval_id in range(interval_count):
             pool.apply_async(collect_tokens,(bam_path, pos, interval_id, chrom, chrom_len, INTERVAL_SIZE), 
-                                callback=tokens.extend, error_callback=collect_err_callback)
+                                callback=tokens[chrom].extend, error_callback=collect_err_callback)
             pos += INTERVAL_SIZE + 1
             pass
         
-        pool.close()
-        pool.join()
-        train_tokens[chrom].extend(tokenization(tokens))
         pass
-        
+    pool.close()
+    pool.join()
+    for chrom in train_chroms + valid_chroms:
+        train_tokens[chrom].extend(tokenization(tokens[chrom]))
+    
         for token in train_tokens[chrom]:
             targets[chrom].append(ground_truth.get_sv_type(chrom, token[5], token[6]))
         pass
-    train.train(targets, train_tokens)
+    
+    train.train(targets, train_tokens, train_chroms, valid_chroms)
 # data = torch.from_numpy(np.random.randint(1, 10, size=(50, 50, 6))).to(torch.bfloat16)
 # target = torch.from_numpy(np.random.randint(0, 3, size = (50, 50))).to(torch.bfloat16)
 # valid_data = torch.from_numpy(np.random.randint(1, 10, size=(50, 50, 6))).to(torch.bfloat16)

@@ -86,33 +86,46 @@ def evaluate(model, data_loader, device, epoch):
         result = classification_report(pred_classes.view(-1), labels.to(device).view(-1), output_dict=True)
         loss = loss_function(pred.permute(0,2,1), labels.to(device).long())
         accu_loss += loss
-        data_loader.desc = "[train epoch {}] loss: {:.3f}, acc: {:.3f}".format(epoch,
+        data_loader.desc = "[valid epoch {}] loss: {:.3f}, acc: {:.3f}".format(epoch,
                                                                                accu_loss.item() / (step + 1),
                                                                                result['macro avg']['f1-score'])
     return accu_loss.item() / (step + 1), result['macro avg']['f1-score']
 
-def train(targets, train_tokens):
-    np.savetxt('targets.csv', np.array(targets['15']))
-    np.savetxt('train_tokens.csv', np.array(train_tokens['15']))
+def train(targets, train_tokens, train_chroms, valid_chroms):
     train_data = []
+    valid_data = []
     train_targets = []
+    valid_targets = []
     idx = 0
-    while True:
-        end = idx + 50 if idx + 50 <= len(train_tokens['15']) else len(train_tokens['15'])
-        train_data.append(train_tokens['15'][idx:end])
-        train_targets.append(targets['15'][idx:end])
-        idx = end
-        if end == len(train_tokens['15']):
-            break
-        pass
-    if len(train_data[-1]) < 50:
-        train_data[-1].extend([[0] * 7] * (50 - len(train_data[-1])))
-        train_targets[-1].extend([0] * (50 - len(train_targets[-1])))
-    split_size = math.ceil(len(train_data) * 0.7)
-    valid_data = torch.from_numpy(np.array(train_data[split_size:len(train_data)])[:,:,:5]).to(torch.bfloat16)
-    train_data = torch.from_numpy(np.array(train_data[0:split_size])[:,:,:5]).to(torch.bfloat16)
-    valid_targets = torch.from_numpy(np.array(train_targets[split_size:len(train_targets)]))
-    train_targets = torch.from_numpy(np.array(train_targets[0:split_size]))
+    for chrom in train_chroms:
+        while True:
+            end = idx + 50 if idx + 50 <= len(train_tokens[chrom]) else len(train_tokens[chrom])
+            train_data.append(train_tokens[chrom][idx:end])
+            train_targets.append(targets[chrom][idx:end])
+            idx = end
+            if end == len(train_tokens[chrom]):
+                if len(train_data[-1]) < 50:
+                    train_data[-1].extend([[0] * 7] * (50 - len(train_data[-1])))
+                    train_targets[-1].extend([0] * (50 - len(train_targets[-1])))
+                break
+            pass
+    for chrom in valid_chroms:
+        while True:
+            end = idx + 50 if idx + 50 <= len(train_tokens[chrom]) else len(train_tokens[chrom])
+            valid_data.append(train_tokens[chrom][idx:end])
+            valid_targets.append(targets[chrom][idx:end])
+            idx = end
+            if end == len(train_tokens[chrom]):
+                if len(valid_data[-1]) < 50:
+                    valid_data[-1].extend([[0] * 7] * (50 - len(valid_data[-1])))
+                    valid_targets[-1].extend([0] * (50 - len(valid_targets[-1])))
+                break
+            pass
+    
+    valid_data = torch.from_numpy(np.array(valid_data)[:,:,:4]).to(torch.bfloat16)
+    train_data = torch.from_numpy(np.array(train_data)[:,:,:4]).to(torch.bfloat16)
+    valid_targets = torch.from_numpy(np.array(valid_targets))
+    train_targets = torch.from_numpy(np.array(train_targets))
     
     train_dataset = pugDataset(train_data, train_targets)
     valid_dataset = pugDataset(valid_data, valid_targets)
