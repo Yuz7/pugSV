@@ -33,8 +33,8 @@ if __name__ == '__main__':
     
     #debug
     #train_chroms = ['chr1', 'chr2', 'chr3', 'chr4']
-    train_chroms = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
-    valid_chroms = ['16']
+    train_chroms = ['15']
+    valid_chroms = ['17']
     train_tokens = defaultdict(list)
     print("******************** init ground truth by vcf ********************")
     ground_truth = pugsvIO.BedRecordContainer(data_config.vcf)
@@ -59,7 +59,9 @@ if __name__ == '__main__':
         pass
     pool.close()
     pool.join()
+    print("******************** start tokenization ********************")
     for chrom in train_chroms + valid_chroms:
+        print("******************** tokenization chrom{0} ********************".format(chrom))
         train_tokens[chrom].extend(tokenization(tokens[chrom]))
     
         for token in train_tokens[chrom]:
@@ -67,56 +69,3 @@ if __name__ == '__main__':
         pass
     
     train.train(targets, train_tokens, train_chroms, valid_chroms)
-# data = torch.from_numpy(np.random.randint(1, 10, size=(50, 50, 6))).to(torch.bfloat16)
-# target = torch.from_numpy(np.random.randint(0, 3, size = (50, 50))).to(torch.bfloat16)
-# valid_data = torch.from_numpy(np.random.randint(1, 10, size=(50, 50, 6))).to(torch.bfloat16)
-# valid_target = torch.from_numpy(np.random.randint(0, 3, size = (50, 50))).to(torch.bfloat16)
-
-# train_dataset = pugDataset(data, target)
-# valid_dataset = pugDataset(valid_data, valid_target)
-
-# train_loader =  DataLoader(train_dataset,
-#                             batch_size=5,
-#                             pin_memory=True,drop_last=True)
-# valid_loader =  DataLoader(valid_dataset,
-#                             batch_size=5,
-#                             pin_memory=True,drop_last=True)
-
-# model = models.create_model(3)
-# # summary(model, input_size=[(1, 6)], batch_size=1, device="cpu")
-
-# tb_writer = SummaryWriter()
-# device = "cuda:0"
-# device = torch.device(device if torch.cuda.is_available() else "cpu")
-# project_path = '/Users/yuz/Work/SVs/pugSV/project'
-# model = models.create_model(3)
-# lr = 0.0001
-# lrf = 0.01
-# epochs = 10
-# pg = [p for p in model.parameters() if p.requires_grad]
-# optimizer = optim.SGD(pg, lr=lr, momentum=0.9, weight_decay=5E-5) 
-# lf = lambda x: ((1 + math.cos(x * math.pi / epochs)) / 2) * (1 - lrf) + lrf  
-# scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)
-# for epoch in range(epochs):
-#     train_loss, train_acc = train.train_one_epoch(model=model,
-#                                                 optimizer=optimizer,
-#                                                 data_loader=train_loader,
-#                                                 device=device,
-#                                                 epoch=epoch)
-#     scheduler.step()
-#     val_loss, val_acc = train.evaluate(model=model,
-#                                         data_loader=valid_loader,
-#                                         device=device,
-#                                         epoch=epoch)
-#     tags = ["train_loss", "train_acc", "val_loss", "val_acc", "learning_rate"]
-#     tb_writer.add_scalar(tags[0], train_loss, epoch)
-#     tb_writer.add_scalar(tags[1], train_acc, epoch)
-#     tb_writer.add_scalar(tags[2], val_loss, epoch)
-#     tb_writer.add_scalar(tags[3], val_acc, epoch)
-#     tb_writer.add_scalar(tags[4], optimizer.param_groups[0]["lr"], epoch)
-#     if platform.system().lower() == 'windows':
-#         torch.save(model.state_dict(), project_path+"/model-{}.pth".format(epoch))
-#     else:
-#         torch.save(model.state_dict(), "%s"%project_path+"/model-{}.pth".format(epoch))
-#     pass
-# pass

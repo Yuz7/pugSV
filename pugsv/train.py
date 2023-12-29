@@ -47,7 +47,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch):
     """
     model.train()
     loss_function = torch.nn.CrossEntropyLoss()
-    accu_loss = torch.zeros(1).to(device) 
+    accu_loss = torch.zeros(1).to(device)
     optimizer.zero_grad()
     sample_num = 0
     data_loader = tqdm(data_loader)
@@ -57,6 +57,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch):
         _,pred,_ = model(exp.to(device))
         pred_classes = torch.max(pred, dim=2)[1]
         result = classification_report(pred_classes.view(-1), label.to(device).view(-1), output_dict=True)
+        print("pre_class.shape:{}".format(pred_classes.shape))
         loss = loss_function(pred.permute(0,2,1), label.to(device).long())
         loss.backward()
         accu_loss += loss.detach()
@@ -83,6 +84,8 @@ def evaluate(model, data_loader, device, epoch):
         sample_num += (exp.shape[0] * exp.shape[1])
         _,pred,_ = model(exp.to(device))
         pred_classes = torch.max(pred, dim=2)[1]
+        print("pred_classes shape:{0}".format(pred_classes.shape))
+        np.savetxt("/Users/yuz/Work/SVs/pugSV/project/model-{0}-{1}-pred.csv".format(epoch, step),pred_classes.detach().numpy(),fmt='%.2f',delimiter=',')
         result = classification_report(pred_classes.view(-1), labels.to(device).view(-1), output_dict=True)
         loss = loss_function(pred.permute(0,2,1), labels.to(device).long())
         accu_loss += loss
