@@ -33,3 +33,376 @@
 	log_dir: /Users/yuz/Work/SVs/pugSV/pugsv/logs/
 	report_dir: /Users/yuz/Work/SVs/pugSV/pugsv/reports/
 	log_file: /Users/yuz/Work/SVs/pugSV/pugsv/logs/main.log
+[INFO] ******************** init ground truth by vcf ********************
+[INFO] ******************** processing bam into tokens with chrom:14 chrom_len:107349540 interval_count:71 ********************
+[INFO] ******************** processing interval id:2 start pos:3000002 end pos:4500002 ********************
+[INFO] ******************** processing interval id:5 start pos:7500005 end pos:9000005 ********************
+[INFO] ******************** processing interval id:4 start pos:6000004 end pos:7500004 ********************
+[INFO] ******************** processing interval id:1 start pos:1500001 end pos:3000001 ********************
+[INFO] ******************** processing interval id:3 start pos:4500003 end pos:6000003 ********************
+[INFO] ******************** processing interval id:0 start pos:0 end pos:1500000 ********************
+[INFO] ******************** processing bam into tokens with chrom:15 chrom_len:102531392 interval_count:68 ********************
+[INFO] ******************** processing interval id:6 start pos:9000006 end pos:10500006 ********************
+[INFO] ******************** processing interval id:7 start pos:10500007 end pos:12000007 ********************
+[INFO] ******************** processing interval id:8 start pos:12000008 end pos:13500008 ********************
+[INFO] ******************** processing interval id:9 start pos:13500009 end pos:15000009 ********************
+[INFO] ******************** processing interval id:10 start pos:15000010 end pos:16500010 ********************
+[INFO] ******************** processing interval id:11 start pos:16500011 end pos:18000011 ********************
+[INFO] ******************** processing interval id:13 start pos:19500013 end pos:21000013 ********************
+[INFO] ******************** processing interval id:16 start pos:24000016 end pos:25500016 ********************
+[INFO] ******************** processing interval id:15 start pos:22500015 end pos:24000015 ********************
+[INFO] ******************** processing interval id:14 start pos:21000014 end pos:22500014 ********************
+[INFO] ******************** processing interval id:12 start pos:18000012 end pos:19500012 ********************
+[INFO] ******************** processing interval id:17 start pos:25500017 end pos:27000017 ********************
+[INFO] ******************** processing interval id:12 add tokens with collect_new_aligns len:3941********************
+[INFO] ******************** processing interval id 12 done, collect_tokens len:4952 and using time:6360.14986038208 ********************
+[INFO] ******************** processing interval id:18 start pos:27000018 end pos:28500018 ********************
+[INFO] ******************** processing interval id:17 add tokens with collect_new_aligns len:3685********************
+[INFO] ******************** processing interval id:15 add tokens with collect_new_aligns len:4425********************
+[INFO] ******************** processing interval id:14 add tokens with collect_new_aligns len:4351********************
+[INFO] ******************** processing interval id 17 done, collect_tokens len:14852 and using time:8776.057004928589 ********************
+[INFO] ******************** processing interval id:19 start pos:28500019 end pos:30000019 ********************
+[INFO] ******************** processing interval id:16 add tokens with collect_new_aligns len:4553********************
+[INFO] ******************** processing interval id 15 done, collect_tokens len:14852 and using time:10259.285926818848 ********************
+[INFO] ******************** processing interval id:20 start pos:30000020 end pos:31500020 ********************
+[INFO] ******************** processing interval id 14 done, collect_tokens len:14852 and using time:10464.648008346558 ********************
+[INFO] ******************** processing interval id:21 start pos:31500021 end pos:33000021 ********************
+[INFO] ******************** processing interval id 16 done, collect_tokens len:14852 and using time:10938.915014266968 ********************
+[INFO] ******************** processing interval id:22 start pos:33000022 end pos:34500022 ********************
+[INFO] ******************** processing interval id:18 add tokens with collect_new_aligns len:3523********************
+[INFO] ******************** processing interval id 18 done, collect_tokens len:14852 and using time:8866.123914718628 ********************
+[INFO] ******************** processing interval id:23 start pos:34500023 end pos:36000023 ********************
+[INFO] ******************** processing interval id:13 add tokens with collect_new_aligns len:14228********************
+[INFO] ******************** processing interval id:19 add tokens with collect_new_aligns len:3726********************
+[INFO] ******************** processing interval id 19 done, collect_tokens len:14852 and using time:9279.939889907837 ********************
+[INFO] ******************** processing interval id:24 start pos:36000024 end pos:37500024 ********************
+[INFO] ******************** processing interval id:20 add tokens with collect_new_aligns len:3978********************
+[INFO] ******************** processing interval id:21 add tokens with collect_new_aligns len:4033********************
+[INFO] ******************** processing interval id:22 add tokens with collect_new_aligns len:4303********************
+[INFO] ******************** processing interval id 20 done, collect_tokens len:14852 and using time:10315.657138824463 ********************
+[INFO] ******************** processing interval id:25 start pos:37500025 end pos:39000025 ********************
+[INFO] ******************** processing interval id 21 done, collect_tokens len:14852 and using time:10815.633773803711 ********************
+[INFO] ******************** processing interval id:26 start pos:39000026 end pos:40500026 ********************
+[INFO] ******************** processing interval id 22 done, collect_tokens len:14852 and using time:10783.041954040527 ********************
+[INFO] ******************** processing interval id:27 start pos:40500027 end pos:42000027 ********************
+[INFO] ******************** processing interval id 13 done, collect_tokens len:14852 and using time:23803.482055664062 ********************
+[INFO] ******************** processing interval id:28 start pos:42000028 end pos:43500028 ********************
+[INFO] ******************** processing interval id:23 add tokens with collect_new_aligns len:4391********************
+[INFO] ******************** processing interval id 23 done, collect_tokens len:14852 and using time:11096.00281715393 ********************
+[INFO] ******************** processing interval id:29 start pos:43500029 end pos:45000029 ********************
+[INFO] ******************** processing interval id:24 add tokens with collect_new_aligns len:4048********************
+[INFO] ******************** processing interval id 24 done, collect_tokens len:14852 and using time:12344.758987426758 ********************
+[INFO] ******************** processing interval id:25 add tokens with collect_new_aligns len:3716********************
+[INFO] ******************** processing interval id:30 start pos:45000030 end pos:46500030 ********************
+[INFO] ******************** processing interval id:27 add tokens with collect_new_aligns len:3749********************
+[INFO] ******************** processing interval id 25 done, collect_tokens len:14852 and using time:11651.374101638794 ********************
+[INFO] ******************** processing interval id:31 start pos:46500031 end pos:48000031 ********************
+[INFO] ******************** processing interval id:26 add tokens with collect_new_aligns len:4244********************
+[INFO] ******************** processing interval id 27 done, collect_tokens len:14852 and using time:11601.24397277832 ********************
+[INFO] ******************** processing interval id:32 start pos:48000032 end pos:49500032 ********************
+[INFO] ******************** processing interval id:28 add tokens with collect_new_aligns len:3529********************
+[INFO] ******************** processing interval id 26 done, collect_tokens len:14852 and using time:12932.621240615845 ********************
+[INFO] ******************** processing interval id:33 start pos:49500033 end pos:51000033 ********************
+[INFO] ******************** processing interval id 28 done, collect_tokens len:14852 and using time:12008.418083190918 ********************
+[INFO] ******************** processing interval id:34 start pos:51000034 end pos:52500034 ********************
+[INFO] ******************** processing interval id:29 add tokens with collect_new_aligns len:3652********************
+[INFO] ******************** processing interval id 29 done, collect_tokens len:14852 and using time:12398.020029067993 ********************
+[INFO] ******************** processing interval id:35 start pos:52500035 end pos:54000035 ********************
+[INFO] ******************** processing interval id:30 add tokens with collect_new_aligns len:3980********************
+[INFO] ******************** processing interval id:31 add tokens with collect_new_aligns len:3536********************
+[INFO] ******************** processing interval id 30 done, collect_tokens len:14852 and using time:12630.690097808838 ********************
+[INFO] ******************** processing interval id:36 start pos:54000036 end pos:55500036 ********************
+[INFO] ******************** processing interval id:32 add tokens with collect_new_aligns len:3730********************
+[INFO] ******************** processing interval id 31 done, collect_tokens len:14852 and using time:11705.252170562744 ********************
+[INFO] ******************** processing interval id:37 start pos:55500037 end pos:57000037 ********************
+[INFO] ******************** processing interval id:33 add tokens with collect_new_aligns len:4379********************
+[INFO] ******************** processing interval id 32 done, collect_tokens len:14852 and using time:11745.283126831055 ********************
+[INFO] ******************** processing interval id:38 start pos:57000038 end pos:58500038 ********************
+[INFO] ******************** processing interval id:34 add tokens with collect_new_aligns len:4161********************
+[INFO] ******************** processing interval id 33 done, collect_tokens len:14852 and using time:12295.1078414917 ********************
+[INFO] ******************** processing interval id:39 start pos:58500039 end pos:60000039 ********************
+[INFO] ******************** processing interval id 34 done, collect_tokens len:14852 and using time:12467.278003692627 ********************
+[INFO] ******************** processing interval id:40 start pos:60000040 end pos:61500040 ********************
+[INFO] ******************** processing interval id:35 add tokens with collect_new_aligns len:4134********************
+[INFO] ******************** processing interval id 35 done, collect_tokens len:14852 and using time:11810.096979141235 ********************
+[INFO] ******************** processing interval id:41 start pos:61500041 end pos:63000041 ********************
+[INFO] ******************** processing interval id:36 add tokens with collect_new_aligns len:4153********************
+[INFO] ******************** processing interval id:37 add tokens with collect_new_aligns len:4082********************
+[INFO] ******************** processing interval id 36 done, collect_tokens len:14852 and using time:12651.563882827759 ********************
+[INFO] ******************** processing interval id:42 start pos:63000042 end pos:64500042 ********************
+[INFO] ******************** processing interval id 37 done, collect_tokens len:14852 and using time:12269.886016845703 ********************
+[INFO] ******************** processing interval id:43 start pos:64500043 end pos:66000043 ********************
+[INFO] ******************** processing interval id:38 add tokens with collect_new_aligns len:4119********************
+[INFO] ******************** processing interval id:39 add tokens with collect_new_aligns len:4093********************
+[INFO] ******************** processing interval id 38 done, collect_tokens len:14852 and using time:13479.169845581055 ********************
+[INFO] ******************** processing interval id:44 start pos:66000044 end pos:67500044 ********************
+[INFO] ******************** processing interval id 39 done, collect_tokens len:14852 and using time:12927.70791053772 ********************
+[INFO] ******************** processing interval id:45 start pos:67500045 end pos:69000045 ********************
+[INFO] ******************** processing interval id:40 add tokens with collect_new_aligns len:4098********************
+[INFO] ******************** processing interval id:41 add tokens with collect_new_aligns len:4067********************
+[INFO] ******************** processing interval id 40 done, collect_tokens len:14852 and using time:13401.462078094482 ********************
+[INFO] ******************** processing interval id:46 start pos:69000046 end pos:70500046 ********************
+[INFO] ******************** processing interval id 41 done, collect_tokens len:14852 and using time:13080.380201339722 ********************
+[INFO] ******************** processing interval id:47 start pos:70500047 end pos:72000047 ********************
+[INFO] ******************** processing interval id:42 add tokens with collect_new_aligns len:4313********************
+[INFO] ******************** processing interval id:43 add tokens with collect_new_aligns len:4410********************
+[INFO] ******************** processing interval id 42 done, collect_tokens len:14852 and using time:13275.185823440552 ********************
+[INFO] ******************** processing interval id:48 start pos:72000048 end pos:73500048 ********************
+[INFO] ******************** processing interval id:44 add tokens with collect_new_aligns len:4145********************
+[INFO] ******************** processing interval id 43 done, collect_tokens len:14852 and using time:14876.730680465698 ********************
+[INFO] ******************** processing interval id:49 start pos:73500049 end pos:75000049 ********************
+[INFO] ******************** processing interval id:45 add tokens with collect_new_aligns len:4397********************
+[INFO] ******************** processing interval id 44 done, collect_tokens len:14852 and using time:13853.163957595825 ********************
+[INFO] ******************** processing interval id:50 start pos:75000050 end pos:76500050 ********************
+[INFO] ******************** processing interval id 45 done, collect_tokens len:14852 and using time:14628.364086151123 ********************
+[INFO] ******************** processing interval id:51 start pos:76500051 end pos:78000051 ********************
+[INFO] ******************** processing interval id:46 add tokens with collect_new_aligns len:4366********************
+[INFO] ******************** processing interval id:47 add tokens with collect_new_aligns len:4368********************
+[INFO] ******************** processing interval id 46 done, collect_tokens len:14852 and using time:14978.791952133179 ********************
+[INFO] ******************** processing interval id:52 start pos:78000052 end pos:79500052 ********************
+[INFO] ******************** processing interval id 47 done, collect_tokens len:14852 and using time:13241.710901260376 ********************
+[INFO] ******************** processing interval id:53 start pos:79500053 end pos:81000053 ********************
+[INFO] ******************** processing interval id:48 add tokens with collect_new_aligns len:4145********************
+[INFO] ******************** processing interval id:49 add tokens with collect_new_aligns len:4378********************
+[INFO] ******************** processing interval id 48 done, collect_tokens len:14852 and using time:13406.156063079834 ********************
+[INFO] ******************** processing interval id:54 start pos:81000054 end pos:82500054 ********************
+[INFO] ******************** processing interval id 49 done, collect_tokens len:14852 and using time:12349.807262420654 ********************
+[INFO] ******************** processing interval id:55 start pos:82500055 end pos:84000055 ********************
+[INFO] ******************** processing interval id:50 add tokens with collect_new_aligns len:4445********************
+[INFO] ******************** processing interval id:51 add tokens with collect_new_aligns len:4238********************
+[INFO] ******************** processing interval id 50 done, collect_tokens len:14852 and using time:13647.547006607056 ********************
+[INFO] ******************** processing interval id:56 start pos:84000056 end pos:85500056 ********************
+[INFO] ******************** processing interval id:53 add tokens with collect_new_aligns len:3807********************
+[INFO] ******************** processing interval id 51 done, collect_tokens len:14852 and using time:13963.504076004028 ********************
+[INFO] ******************** processing interval id:57 start pos:85500057 end pos:87000057 ********************
+[INFO] ******************** processing interval id:52 add tokens with collect_new_aligns len:4047********************
+[INFO] ******************** processing interval id 53 done, collect_tokens len:14852 and using time:12030.379056930542 ********************
+[INFO] ******************** processing interval id:58 start pos:87000058 end pos:88500058 ********************
+[INFO] ******************** processing interval id 52 done, collect_tokens len:14852 and using time:13838.366985321045 ********************
+[INFO] ******************** processing interval id:59 start pos:88500059 end pos:90000059 ********************
+[INFO] ******************** processing interval id:54 add tokens with collect_new_aligns len:4002********************
+[INFO] ******************** processing interval id:55 add tokens with collect_new_aligns len:3735********************
+[INFO] ******************** processing interval id 55 done, collect_tokens len:14852 and using time:11174.412250518799 ********************
+[INFO] ******************** processing interval id 54 done, collect_tokens len:14852 and using time:12193.963050842285 ********************
+[INFO] ******************** processing interval id:60 start pos:90000060 end pos:91500060 ********************
+[INFO] ******************** processing interval id:61 start pos:91500061 end pos:93000061 ********************
+[INFO] ******************** processing interval id:56 add tokens with collect_new_aligns len:3675********************
+[INFO] ******************** processing interval id:57 add tokens with collect_new_aligns len:3669********************
+[INFO] ******************** processing interval id 56 done, collect_tokens len:14852 and using time:12077.79598236084 ********************
+[INFO] ******************** processing interval id:62 start pos:93000062 end pos:94500062 ********************
+[INFO] ******************** processing interval id 57 done, collect_tokens len:14852 and using time:11244.668960571289 ********************
+[INFO] ******************** processing interval id:58 add tokens with collect_new_aligns len:3922********************
+[INFO] ******************** processing interval id:63 start pos:94500063 end pos:96000063 ********************
+[INFO] ******************** processing interval id 58 done, collect_tokens len:14852 and using time:12052.992820739746 ********************
+[INFO] ******************** processing interval id:64 start pos:96000064 end pos:97500064 ********************
+[INFO] ******************** processing interval id:59 add tokens with collect_new_aligns len:5063********************
+[INFO] ******************** processing interval id 59 done, collect_tokens len:14852 and using time:14287.014245986938 ********************
+[INFO] ******************** processing interval id:65 start pos:97500065 end pos:99000065 ********************
+[INFO] ******************** processing interval id:60 add tokens with collect_new_aligns len:4381********************
+[INFO] ******************** processing interval id:61 add tokens with collect_new_aligns len:4478********************
+[INFO] ******************** processing interval id 60 done, collect_tokens len:14852 and using time:13080.408096313477 ********************
+[INFO] ******************** processing interval id:66 start pos:99000066 end pos:100500066 ********************
+[INFO] ******************** processing interval id 61 done, collect_tokens len:14852 and using time:13428.33399772644 ********************
+[INFO] ******************** processing interval id:67 start pos:100500067 end pos:102000067 ********************
+[INFO] ******************** processing interval id:62 add tokens with collect_new_aligns len:5211********************
+[INFO] ******************** processing interval id:63 add tokens with collect_new_aligns len:4395********************
+[INFO] ******************** processing interval id 62 done, collect_tokens len:14852 and using time:13058.11595916748 ********************
+[INFO] ******************** processing interval id:68 start pos:102000068 end pos:103500068 ********************
+[INFO] ******************** processing interval id:64 add tokens with collect_new_aligns len:4763********************
+[INFO] ******************** processing interval id 63 done, collect_tokens len:14852 and using time:13097.851991653442 ********************
+[INFO] ******************** processing interval id:69 start pos:103500069 end pos:105000069 ********************
+[INFO] ******************** processing interval id 64 done, collect_tokens len:14852 and using time:12523.372888565063 ********************
+[INFO] ******************** processing interval id:70 start pos:105000070 end pos:106500070 ********************
+[INFO] ******************** processing interval id:65 add tokens with collect_new_aligns len:3904********************
+[INFO] ******************** processing interval id 65 done, collect_tokens len:14852 and using time:13093.663930892944 ********************
+[INFO] ******************** processing interval id:0 start pos:0 end pos:1500000 ********************
+[INFO] ******************** processing interval id:1 start pos:1500001 end pos:3000001 ********************
+[INFO] ******************** processing interval id:2 start pos:3000002 end pos:4500002 ********************
+[INFO] ******************** processing interval id:3 start pos:4500003 end pos:6000003 ********************
+[INFO] ******************** processing interval id:4 start pos:6000004 end pos:7500004 ********************
+[INFO] ******************** processing interval id:5 start pos:7500005 end pos:9000005 ********************
+[INFO] ******************** processing interval id:6 start pos:9000006 end pos:10500006 ********************
+[INFO] ******************** processing interval id:7 start pos:10500007 end pos:12000007 ********************
+[INFO] ******************** processing interval id:8 start pos:12000008 end pos:13500008 ********************
+[INFO] ******************** processing interval id:9 start pos:13500009 end pos:15000009 ********************
+[INFO] ******************** processing interval id:10 start pos:15000010 end pos:16500010 ********************
+[INFO] ******************** processing interval id:11 start pos:16500011 end pos:18000011 ********************
+[INFO] ******************** processing interval id:66 add tokens with collect_new_aligns len:4172********************
+[INFO] ******************** processing interval id:12 start pos:18000012 end pos:19500012 ********************
+[INFO] ******************** processing interval id:13 start pos:19500013 end pos:21000013 ********************
+[INFO] ******************** processing interval id:67 add tokens with collect_new_aligns len:4479********************
+[INFO] ******************** processing interval id 66 done, collect_tokens len:14852 and using time:13548.432111740112 ********************
+[INFO] ******************** processing interval id:14 start pos:21000014 end pos:22500014 ********************
+[INFO] ******************** processing interval id 67 done, collect_tokens len:14852 and using time:14376.215934753418 ********************
+[INFO] ******************** processing interval id:15 start pos:22500015 end pos:24000015 ********************
+[INFO] ******************** processing interval id:68 add tokens with collect_new_aligns len:5988********************
+[INFO] ******************** processing interval id:69 add tokens with collect_new_aligns len:4437********************
+[INFO] ******************** processing interval id:70 add tokens with collect_new_aligns len:5089********************
+[INFO] ******************** processing interval id 68 done, collect_tokens len:14852 and using time:14651.94582939148 ********************
+[INFO] ******************** processing interval id:16 start pos:24000016 end pos:25500016 ********************
+[INFO] ******************** processing interval id:14 add tokens with collect_new_aligns len:4167********************
+[INFO] ******************** processing interval id 69 done, collect_tokens len:14852 and using time:14553.437948226929 ********************
+[INFO] ******************** processing interval id:17 start pos:25500017 end pos:27000017 ********************
+[INFO] ******************** processing interval id 70 done, collect_tokens len:14689 and using time:14290.794134140015 ********************
+[INFO] ******************** processing interval id:13 add tokens with collect_new_aligns len:5455********************
+[INFO] ******************** processing interval id:18 start pos:27000018 end pos:28500018 ********************
+[INFO] ******************** processing interval id 14 done, collect_tokens len:9543 and using time:7301.918029785156 ********************
+[INFO] ******************** processing interval id:19 start pos:28500019 end pos:30000019 ********************
+[INFO] ******************** processing interval id 13 done, collect_tokens len:9503 and using time:10996.994018554688 ********************
+[INFO] ******************** processing interval id:20 start pos:30000020 end pos:31500020 ********************
+[INFO] ******************** processing interval id:15 add tokens with collect_new_aligns len:6794********************
+[INFO] ******************** processing interval id:16 add tokens with collect_new_aligns len:3837********************
+[INFO] ******************** processing interval id 15 done, collect_tokens len:13864 and using time:14218.889951705933 ********************
+[INFO] ******************** processing interval id:21 start pos:31500021 end pos:33000021 ********************
+[INFO] ******************** processing interval id 16 done, collect_tokens len:14852 and using time:11472.829818725586 ********************
+[INFO] ******************** processing interval id:22 start pos:33000022 end pos:34500022 ********************
+[INFO] ******************** processing interval id:17 add tokens with collect_new_aligns len:3725********************
+[INFO] ******************** processing interval id:18 add tokens with collect_new_aligns len:3853********************
+[INFO] ******************** processing interval id 17 done, collect_tokens len:14852 and using time:12748.07620048523 ********************
+[INFO] ******************** processing interval id:23 start pos:34500023 end pos:36000023 ********************
+[INFO] ******************** processing interval id 18 done, collect_tokens len:14852 and using time:12571.422815322876 ********************
+[INFO] ******************** processing interval id:24 start pos:36000024 end pos:37500024 ********************
+[INFO] ******************** processing interval id:19 add tokens with collect_new_aligns len:7416********************
+[INFO] ******************** processing interval id:20 add tokens with collect_new_aligns len:7198********************
+[INFO] ******************** processing interval id 19 done, collect_tokens len:14357 and using time:15995.823860168457 ********************
+[INFO] ******************** processing interval id:25 start pos:37500025 end pos:39000025 ********************
+[INFO] ******************** processing interval id 20 done, collect_tokens len:14852 and using time:16054.303169250488 ********************
+[INFO] ******************** processing interval id:26 start pos:39000026 end pos:40500026 ********************
+[INFO] ******************** processing interval id:22 add tokens with collect_new_aligns len:3950********************
+[INFO] ******************** processing interval id:21 add tokens with collect_new_aligns len:6276********************
+[INFO] ******************** processing interval id 22 done, collect_tokens len:14852 and using time:13559.42678451538 ********************
+[INFO] ******************** processing interval id:27 start pos:40500027 end pos:42000027 ********************
+[INFO] ******************** processing interval id:23 add tokens with collect_new_aligns len:4230********************
+[INFO] ******************** processing interval id:24 add tokens with collect_new_aligns len:4008********************
+[INFO] ******************** processing interval id 21 done, collect_tokens len:14852 and using time:16131.53886795044 ********************
+[INFO] ******************** processing interval id 23 done, collect_tokens len:14852 and using time:13048.75898361206 ********************
+[INFO] ******************** processing interval id:28 start pos:42000028 end pos:43500028 ********************
+[INFO] ******************** processing interval id:29 start pos:43500029 end pos:45000029 ********************
+[INFO] ******************** processing interval id 24 done, collect_tokens len:14852 and using time:12844.730138778687 ********************
+[INFO] ******************** processing interval id:30 start pos:45000030 end pos:46500030 ********************
+[INFO] ******************** processing interval id:25 add tokens with collect_new_aligns len:4043********************
+[INFO] ******************** processing interval id 25 done, collect_tokens len:14852 and using time:13175.670862197876 ********************
+[INFO] ******************** processing interval id:31 start pos:46500031 end pos:48000031 ********************
+[INFO] ******************** processing interval id:26 add tokens with collect_new_aligns len:4328********************
+[INFO] ******************** processing interval id 26 done, collect_tokens len:14852 and using time:15105.355978012085 ********************
+[INFO] ******************** processing interval id:32 start pos:48000032 end pos:49500032 ********************
+[INFO] ******************** processing interval id:27 add tokens with collect_new_aligns len:4687********************
+[INFO] ******************** processing interval id:29 add tokens with collect_new_aligns len:4660********************
+[INFO] ******************** processing interval id:28 add tokens with collect_new_aligns len:4334********************
+[INFO] ******************** processing interval id 27 done, collect_tokens len:14852 and using time:13772.691249847412 ********************
+[INFO] ******************** processing interval id:33 start pos:49500033 end pos:51000033 ********************
+[INFO] ******************** processing interval id:30 add tokens with collect_new_aligns len:4892********************
+[INFO] ******************** processing interval id 29 done, collect_tokens len:14852 and using time:13078.20200920105 ********************
+[INFO] ******************** processing interval id:34 start pos:51000034 end pos:52500034 ********************
+[INFO] ******************** processing interval id 28 done, collect_tokens len:14852 and using time:13553.46393585205 ********************
+[INFO] ******************** processing interval id:35 start pos:52500035 end pos:54000035 ********************
+[INFO] ******************** processing interval id 30 done, collect_tokens len:14852 and using time:13757.669925689697 ********************
+[INFO] ******************** processing interval id:36 start pos:54000036 end pos:55500036 ********************
+[INFO] ******************** processing interval id:31 add tokens with collect_new_aligns len:3700********************
+[INFO] ******************** processing interval id 31 done, collect_tokens len:14852 and using time:12859.193801879883 ********************
+[INFO] ******************** processing interval id:37 start pos:55500037 end pos:57000037 ********************
+[INFO] ******************** processing interval id:32 add tokens with collect_new_aligns len:4071********************
+[INFO] ******************** processing interval id 32 done, collect_tokens len:14852 and using time:13166.68701171875 ********************
+[INFO] ******************** processing interval id:38 start pos:57000038 end pos:58500038 ********************
+[INFO] ******************** processing interval id:33 add tokens with collect_new_aligns len:4188********************
+[INFO] ******************** processing interval id:34 add tokens with collect_new_aligns len:4216********************
+[INFO] ******************** processing interval id:36 add tokens with collect_new_aligns len:3802********************
+[INFO] ******************** processing interval id:35 add tokens with collect_new_aligns len:4056********************
+[INFO] ******************** processing interval id 33 done, collect_tokens len:14852 and using time:13400.672912597656 ********************
+[INFO] ******************** processing interval id:39 start pos:58500039 end pos:60000039 ********************
+[INFO] ******************** processing interval id 34 done, collect_tokens len:14852 and using time:12733.057022094727 ********************
+[INFO] ******************** processing interval id:40 start pos:60000040 end pos:61500040 ********************
+[INFO] ******************** processing interval id 36 done, collect_tokens len:14852 and using time:12548.215866088867 ********************
+[INFO] ******************** processing interval id:41 start pos:61500041 end pos:63000041 ********************
+[INFO] ******************** processing interval id 35 done, collect_tokens len:14852 and using time:13897.166013717651 ********************
+[INFO] ******************** processing interval id:42 start pos:63000042 end pos:64500042 ********************
+[INFO] ******************** processing interval id:37 add tokens with collect_new_aligns len:4180********************
+[INFO] ******************** processing interval id 37 done, collect_tokens len:14852 and using time:13922.70302772522 ********************
+[INFO] ******************** processing interval id:43 start pos:64500043 end pos:66000043 ********************
+[INFO] ******************** processing interval id:38 add tokens with collect_new_aligns len:4216********************
+[INFO] ******************** processing interval id 38 done, collect_tokens len:14852 and using time:15348.251819610596 ********************
+[INFO] ******************** processing interval id:44 start pos:66000044 end pos:67500044 ********************
+[INFO] ******************** processing interval id:39 add tokens with collect_new_aligns len:4410********************
+[INFO] ******************** processing interval id:40 add tokens with collect_new_aligns len:4296********************
+[INFO] ******************** processing interval id:41 add tokens with collect_new_aligns len:4001********************
+[INFO] ******************** processing interval id 39 done, collect_tokens len:14852 and using time:15743.558883666992 ********************
+[INFO] ******************** processing interval id:45 start pos:67500045 end pos:69000045 ********************
+[INFO] ******************** processing interval id:42 add tokens with collect_new_aligns len:4257********************
+[INFO] ******************** processing interval id 40 done, collect_tokens len:14852 and using time:15780.452013015747 ********************
+[INFO] ******************** processing interval id:46 start pos:69000046 end pos:70500046 ********************
+[INFO] ******************** processing interval id 41 done, collect_tokens len:14852 and using time:15341.991901397705 ********************
+[INFO] ******************** processing interval id:47 start pos:70500047 end pos:72000047 ********************
+[INFO] ******************** processing interval id 42 done, collect_tokens len:14852 and using time:15901.400089263916 ********************
+[INFO] ******************** processing interval id:48 start pos:72000048 end pos:73500048 ********************
+[INFO] ******************** processing interval id:43 add tokens with collect_new_aligns len:6137********************
+[INFO] ******************** processing interval id 43 done, collect_tokens len:14852 and using time:17131.79588317871 ********************
+[INFO] ******************** processing interval id:49 start pos:73500049 end pos:75000049 ********************
+[INFO] ******************** processing interval id:44 add tokens with collect_new_aligns len:4541********************
+[INFO] ******************** processing interval id 44 done, collect_tokens len:14852 and using time:17272.1049785614 ********************
+[INFO] ******************** processing interval id:45 add tokens with collect_new_aligns len:4165********************
+[INFO] ******************** processing interval id:50 start pos:75000050 end pos:76500050 ********************
+[INFO] ******************** processing interval id:46 add tokens with collect_new_aligns len:4253********************
+[INFO] ******************** processing interval id:47 add tokens with collect_new_aligns len:4192********************
+[INFO] ******************** processing interval id:48 add tokens with collect_new_aligns len:4563********************
+[INFO] ******************** processing interval id 45 done, collect_tokens len:14852 and using time:15700.618982315063 ********************
+[INFO] ******************** processing interval id:51 start pos:76500051 end pos:78000051 ********************
+[INFO] ******************** processing interval id 46 done, collect_tokens len:14852 and using time:15381.960153579712 ********************
+[INFO] ******************** processing interval id:52 start pos:78000052 end pos:79500052 ********************
+[INFO] ******************** processing interval id 47 done, collect_tokens len:14852 and using time:15542.79613494873 ********************
+[INFO] ******************** processing interval id:53 start pos:79500053 end pos:81000053 ********************
+[INFO] ******************** processing interval id 48 done, collect_tokens len:14852 and using time:15260.929107666016 ********************
+[INFO] ******************** processing interval id:54 start pos:81000054 end pos:82500054 ********************
+[INFO] ******************** processing interval id:49 add tokens with collect_new_aligns len:4514********************
+[INFO] ******************** processing interval id 49 done, collect_tokens len:14852 and using time:15394.012212753296 ********************
+[INFO] ******************** processing interval id:55 start pos:82500055 end pos:84000055 ********************
+[INFO] ******************** processing interval id:50 add tokens with collect_new_aligns len:5004********************
+[INFO] ******************** processing interval id:51 add tokens with collect_new_aligns len:4301********************
+[INFO] ******************** processing interval id:53 add tokens with collect_new_aligns len:4201********************
+[INFO] ******************** processing interval id:52 add tokens with collect_new_aligns len:4466********************
+[INFO] ******************** processing interval id:54 add tokens with collect_new_aligns len:4196********************
+[INFO] ******************** processing interval id 51 done, collect_tokens len:14852 and using time:14948.055028915405 ********************
+[INFO] ******************** processing interval id:56 start pos:84000056 end pos:85500056 ********************
+[INFO] ******************** processing interval id 50 done, collect_tokens len:14852 and using time:17412.217140197754 ********************
+[INFO] ******************** processing interval id:57 start pos:85500057 end pos:87000057 ********************
+[INFO] ******************** processing interval id 53 done, collect_tokens len:14852 and using time:15174.668073654175 ********************
+[INFO] ******************** processing interval id:58 start pos:87000058 end pos:88500058 ********************
+[INFO] ******************** processing interval id 52 done, collect_tokens len:14852 and using time:16403.428077697754 ********************
+[INFO] ******************** processing interval id 54 done, collect_tokens len:14852 and using time:14930.28712272644 ********************
+[INFO] ******************** processing interval id:59 start pos:88500059 end pos:90000059 ********************
+[INFO] ******************** processing interval id:60 start pos:90000060 end pos:91500060 ********************
+[INFO] ******************** processing interval id:55 add tokens with collect_new_aligns len:6477********************
+[INFO] ******************** processing interval id 55 done, collect_tokens len:14358 and using time:13886.528730392456 ********************
+[INFO] ******************** processing interval id:61 start pos:91500061 end pos:93000061 ********************
+[INFO] ******************** processing interval id:56 add tokens with collect_new_aligns len:4920********************
+[INFO] ******************** processing interval id:58 add tokens with collect_new_aligns len:3556********************
+[INFO] ******************** processing interval id 58 done, collect_tokens len:14852 and using time:12013.964653015137 ********************
+[INFO] ******************** processing interval id:62 start pos:93000062 end pos:94500062 ********************
+[INFO] ******************** processing interval id 56 done, collect_tokens len:14358 and using time:13663.187265396118 ********************
+[INFO] ******************** processing interval id:57 add tokens with collect_new_aligns len:4907********************
+[INFO] ******************** processing interval id:63 start pos:94500063 end pos:96000063 ********************
+[INFO] ******************** processing interval id:59 add tokens with collect_new_aligns len:4327********************
+[INFO] ******************** processing interval id:60 add tokens with collect_new_aligns len:7765********************
+[INFO] ******************** processing interval id 57 done, collect_tokens len:14852 and using time:15015.995979309082 ********************
+[INFO] ******************** processing interval id:64 start pos:96000064 end pos:97500064 ********************
+[INFO] ******************** processing interval id 59 done, collect_tokens len:14852 and using time:14477.488994598389 ********************
+[INFO] ******************** processing interval id:65 start pos:97500065 end pos:99000065 ********************
+[INFO] ******************** processing interval id:61 add tokens with collect_new_aligns len:4211********************
+[INFO] ******************** processing interval id 60 done, collect_tokens len:14852 and using time:17229.79497909546 ********************
+[INFO] ******************** processing interval id:66 start pos:99000066 end pos:100500066 ********************
+[INFO] ******************** processing interval id 61 done, collect_tokens len:14852 and using time:14417.06395149231 ********************
+[INFO] ******************** processing interval id:67 start pos:100500067 end pos:102000067 ********************
+[INFO] ******************** processing interval id:63 add tokens with collect_new_aligns len:4021********************
+[INFO] ******************** processing interval id:62 add tokens with collect_new_aligns len:4202********************
+[INFO] ******************** processing interval id:65 add tokens with collect_new_aligns len:4273********************
+[INFO] ******************** processing interval id:64 add tokens with collect_new_aligns len:3747********************
+[INFO] ******************** processing interval id 63 done, collect_tokens len:14852 and using time:15085.768938064575 ********************
+[INFO] ******************** processing interval id 62 done, collect_tokens len:14852 and using time:15739.959955215454 ********************
+[INFO] ******************** processing interval id 65 done, collect_tokens len:14852 and using time:13377.17604637146 ********************
+[INFO] ******************** processing interval id 64 done, collect_tokens len:14852 and using time:14318.408012390137 ********************
+[INFO] ******************** processing interval id:66 add tokens with collect_new_aligns len:4303********************
+[INFO] ******************** processing interval id:67 add tokens with collect_new_aligns len:4255********************
+[INFO] ******************** processing interval id 66 done, collect_tokens len:14852 and using time:14507.350206375122 ********************
+[INFO] ******************** processing interval id 67 done, collect_tokens len:14852 and using time:14013.61894607544 ********************
+[INFO] ******************** start tokenization ********************
+[INFO] ******************** tokenization chrom14 ********************
+[INFO] ******************** tokenization chrom15 ********************

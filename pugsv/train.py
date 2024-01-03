@@ -35,8 +35,10 @@ from torch.utils.tensorboard import SummaryWriter
 import torch.optim as optim
 import pysam, torch, time, platform, os, multiprocessing
 from sklearn.metrics import classification_report
+from pugsv.loss import FocalLoss
 from tqdm import tqdm
 import numpy as np
+
 
 INTERVAL_SIZE = 1500000
 BATCH_SIZE = 128
@@ -47,7 +49,9 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch):
     """
     model.train()
     loss_function = torch.nn.CrossEntropyLoss()
+    focal_loss_function = FocalLoss(gamma=2, alpha=torch.tensor([0.01, 0.325, 0.325, 0.3]))
     accu_loss = torch.zeros(1).to(device)
+    torch.set_grad_enabled(True)
     optimizer.zero_grad()
     sample_num = 0
     data_loader = tqdm(data_loader)
@@ -57,15 +61,14 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch):
         _,pred,_ = model(exp.to(device))
         pred_classes = torch.max(pred, dim=2)[1]
         result = classification_report(pred_classes.view(-1), label.to(device).view(-1), output_dict=True)
-        print("pre_class.shape:{}".format(pred_classes.shape))
-        loss = loss_function(pred.permute(0,2,1), label.to(device).long())
-        loss.backward()
-        accu_loss += loss.detach()
+        focal_loss = focal_loss_function(pred.permute(0,2,1), label.to(device).long())
+        focal_loss.backward()
+        accu_loss += focal_loss.detach()
         data_loader.desc = "[train epoch {}] loss: {:.3f}, acc: {:.3f}".format(epoch,
                                                                                accu_loss.item() / (step + 1),
                                                                                result['macro avg']['f1-score'])
-        if not torch.isfinite(loss):
-            print('WARNING: non-finite loss, ending training ', loss)
+        if not torch.isfinite(focal_loss):
+            print('WARNING: non-finite loss, ending training ', focal_loss)
             sys.exit(1)
         optimizer.step() 
         optimizer.zero_grad()
@@ -74,21 +77,20 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch):
 @torch.no_grad()
 def evaluate(model, data_loader, device, epoch):
     model.eval()
-    loss_function = torch.nn.CrossEntropyLoss()
-    accu_num = torch.zeros(1).to(device)
     accu_loss = torch.zeros(1).to(device)
+    focal_loss_function = FocalLoss(gamma=2, alpha=torch.tensor([0.05, 0.325, 0.325, 0.3]), required_grad=False)
     sample_num = 0
     data_loader = tqdm(data_loader)
+    torch.set_grad_enabled(False)
     for step, data in enumerate(data_loader):
         exp, labels = data
         sample_num += (exp.shape[0] * exp.shape[1])
         _,pred,_ = model(exp.to(device))
         pred_classes = torch.max(pred, dim=2)[1]
-        print("pred_classes shape:{0}".format(pred_classes.shape))
         np.savetxt("/Users/yuz/Work/SVs/pugSV/project/model-{0}-{1}-pred.csv".format(epoch, step),pred_classes.detach().numpy(),fmt='%.2f',delimiter=',')
         result = classification_report(pred_classes.view(-1), labels.to(device).view(-1), output_dict=True)
-        loss = loss_function(pred.permute(0,2,1), labels.to(device).long())
-        accu_loss += loss
+        focal_loss = focal_loss_function(pred.permute(0,2,1), labels.to(device).long())
+        accu_loss += focal_loss.detach()
         data_loader.desc = "[valid epoch {}] loss: {:.3f}, acc: {:.3f}".format(epoch,
                                                                                accu_loss.item() / (step + 1),
                                                                                result['macro avg']['f1-score'])
@@ -99,8 +101,8 @@ def train(targets, train_tokens, train_chroms, valid_chroms):
     valid_data = []
     train_targets = []
     valid_targets = []
-    idx = 0
     for chrom in train_chroms:
+        idx = 0
         while True:
             end = idx + 50 if idx + 50 <= len(train_tokens[chrom]) else len(train_tokens[chrom])
             train_data.append(train_tokens[chrom][idx:end])
@@ -113,6 +115,7 @@ def train(targets, train_tokens, train_chroms, valid_chroms):
                 break
             pass
     for chrom in valid_chroms:
+        idx = 0
         while True:
             end = idx + 50 if idx + 50 <= len(train_tokens[chrom]) else len(train_tokens[chrom])
             valid_data.append(train_tokens[chrom][idx:end])
@@ -125,11 +128,13 @@ def train(targets, train_tokens, train_chroms, valid_chroms):
                 break
             pass
     
+    np.savetxt("/Users/yuz/Work/SVs/pugSV/train_tokens_temp.csv",np.array(train_targets),fmt='%d',delimiter=',')
+    np.savetxt("/Users/yuz/Work/SVs/pugSV/train_data_temp.csv",np.array(train_data),fmt='%d',delimiter=',')
     valid_data = torch.from_numpy(np.array(valid_data)[:,:,:4]).to(torch.bfloat16)
     train_data = torch.from_numpy(np.array(train_data)[:,:,:4]).to(torch.bfloat16)
+    print("valid_data shape:{}".format(valid_data.shape))
     valid_targets = torch.from_numpy(np.array(valid_targets))
     train_targets = torch.from_numpy(np.array(train_targets))
-    
     train_dataset = pugDataset(train_data, train_targets)
     valid_dataset = pugDataset(valid_data, valid_targets)
     
@@ -150,7 +155,7 @@ def train(targets, train_tokens, train_chroms, valid_chroms):
     device = torch.device(device if torch.cuda.is_available() else "cpu")
     project_path = '/Users/yuz/Work/SVs/pugSV/project'
     model = models.create_model(4)
-    lr = 0.0001
+    lr = 0.00001
     lrf = 0.01
     epochs = 10
     pg = [p for p in model.parameters() if p.requires_grad]
@@ -179,4 +184,7 @@ def train(targets, train_tokens, train_chroms, valid_chroms):
         else:
             torch.save(model.state_dict(), "%s"%project_path+"/model-{}.pth".format(epoch))
         pass
+    
+    # for epoch in range(epochs):
+    #     pass
     pass

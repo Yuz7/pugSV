@@ -26,11 +26,12 @@ from pugsv.tokenization import token
 from pugsv.tokenization import tokenization
 from intervaltree import IntervalTree
 import time, copy
+import logging
 
 MIN_TOKEN_SIZE = 100
 
 def collect_err_callback(err):
-    print("error happen:{0}".format(str(err)))
+    logging.info("error happen:{0}".format(str(err)))
 
 def collect_tokens(bam_path, pos, interval_id, chrom, chrom_len, interval_size):
     aln_file = pysam.AlignmentFile(bam_path)
@@ -38,7 +39,7 @@ def collect_tokens(bam_path, pos, interval_id, chrom, chrom_len, interval_size):
     end = pos + interval_size if pos + interval_size < chrom_len else chrom_len
     collect_new_aligns = IntervalTree()
     collect_tokens = []
-    print("******************** processing interval id:{0} start pos:{1} end pos:{2} ********************".format(interval_id, start, end))
+    logging.info("******************** processing interval id:{0} start pos:{1} end pos:{2} ********************".format(interval_id, start, end))
     start_time = time.time()
     aligns = aln_file.fetch(chrom, start, end)
     for align in aligns:
@@ -48,7 +49,7 @@ def collect_tokens(bam_path, pos, interval_id, chrom, chrom_len, interval_size):
     token_iter_pos = pos
     if len(collect_new_aligns) == 0:
         return collect_tokens
-    print("******************** processing interval id:{0} add tokens with collect_new_aligns len:{1}********************".format(interval_id, len(collect_new_aligns)))
+    logging.info("******************** processing interval id:{0} add tokens with collect_new_aligns len:{1}********************".format(interval_id, len(collect_new_aligns)))
     while(True):
         token_temp = token()
         overlap_aligns = collect_new_aligns.overlap(token_iter_pos, token_iter_pos + MIN_TOKEN_SIZE)
@@ -61,5 +62,5 @@ def collect_tokens(bam_path, pos, interval_id, chrom, chrom_len, interval_size):
             break
         token_iter_pos += MIN_TOKEN_SIZE + 1
         pass
-    print("******************** processing interval id {0} done, collect_tokens len:{1} and using time:{2} ********************".format(interval_id, len(collect_tokens), (time.time() - start_time) * 1000))
+    logging.info("******************** processing interval id {0} done, collect_tokens len:{1} and using time:{2} ********************".format(interval_id, len(collect_tokens), (time.time() - start_time) * 1000))
     return collect_tokens

@@ -2,7 +2,6 @@ import pugsv.utils.config_utils as config_utils
 import pugsv.model as models
 from torchsummary import summary
 import numpy as np
-import argparse, gc, sys, math
 from pugsv.utils.config_utils import TrainingConfig
 from pugsv.tokenization import tokenization
 from pugsv.preprocessing import collect_tokens,collect_err_callback
@@ -19,10 +18,11 @@ import torch.optim as optim
 import pysam, torch, tqdm, time, platform, os, multiprocessing
 import pugsv.train as train
 import warnings
+import logging
 
 warnings.filterwarnings('ignore')
 
-INTERVAL_SIZE = 6000000
+INTERVAL_SIZE = 1500000
 
 if __name__ == '__main__':
     data_config = load_config("/Users/yuz/Work/SVs/pugSV/pugsv/config.yaml", config_type=config_utils.CONFIG_TYPE.TRAIN)
@@ -33,15 +33,15 @@ if __name__ == '__main__':
     
     #debug
     #train_chroms = ['chr1', 'chr2', 'chr3', 'chr4']
-    train_chroms = ['15']
-    valid_chroms = ['17']
+    train_chroms = ['14']
+    valid_chroms = ['15']
     train_tokens = defaultdict(list)
-    print("******************** init ground truth by vcf ********************")
+    logging.info("******************** init ground truth by vcf ********************")
     ground_truth = pugsvIO.BedRecordContainer(data_config.vcf)
     targets = defaultdict(list)
     tokens = defaultdict(list)
     # valid_tokens = []
-    pool = multiprocessing.Pool(processes = 5)
+    pool = multiprocessing.get_context('fork').Pool(processes = 6)
     for chrom in train_chroms + valid_chroms:
         
         #TODO multi-threading by interval_size
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         chrom_len = aln_file.get_reference_length(chrom)
         interval_count = chrom_len // INTERVAL_SIZE
         pos = 0
-        print("******************** processing bam into tokens with chrom:{0} chrom_len:{1} interval_count:{2} ********************".format(chrom, chrom_len, interval_count))
+        logging.info("******************** processing bam into tokens with chrom:{0} chrom_len:{1} interval_count:{2} ********************".format(chrom, chrom_len, interval_count))
         for interval_id in range(interval_count):
             pool.apply_async(collect_tokens,(bam_path, pos, interval_id, chrom, chrom_len, INTERVAL_SIZE), 
                                 callback=tokens[chrom].extend, error_callback=collect_err_callback)
@@ -59,9 +59,9 @@ if __name__ == '__main__':
         pass
     pool.close()
     pool.join()
-    print("******************** start tokenization ********************")
+    logging.info("******************** start tokenization ********************")
     for chrom in train_chroms + valid_chroms:
-        print("******************** tokenization chrom{0} ********************".format(chrom))
+        logging.info("******************** tokenization chrom{0} ********************".format(chrom))
         train_tokens[chrom].extend(tokenization(tokens[chrom]))
     
         for token in train_tokens[chrom]:
